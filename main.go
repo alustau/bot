@@ -17,10 +17,9 @@ const (
 	writeTimeout = 10 * time.Second
 )
 
-
 func main() {
 	fmt.Printf("============================================================\n")
-	fmt.Printf("==================== CustomerGauge API =====================\n")
+	fmt.Printf("=============================API============================\n")
 	fmt.Printf("============================================================\n")
 
 	log.Println("Starting Connection MySql")
