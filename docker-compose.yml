@@ -1,0 +1,16 @@
+version: '3.7'
+
+services:
+  mysql:
+    image: mysql:8.0.22
+    ports:
+      - 3305:3306
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+
+  bot:
+    image: bot:cgauge
+    ports:
+      - 8282:8181
+    depends_on:
+      - mysql
