@@ -1,14 +1,8 @@
 start:
-	docker-compose up -d mysql
-
-install:
-	go install
+	docker-compose up
 
 build:
-	go build -o bot main.go
-
-docker-build:
-	docker build -t bot:cgauge .
+	docker build -t bot:latest .
 
 test:
 	go test ./...

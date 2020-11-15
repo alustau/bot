@@ -9,7 +9,7 @@ services:
       MYSQL_ROOT_PASSWORD: root
 
   bot:
-    image: bot:cgauge
+    image: bot:latest
     ports:
       - 8282:8181
     depends_on:
