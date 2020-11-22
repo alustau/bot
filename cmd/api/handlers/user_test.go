@@ -108,6 +108,10 @@ func TestRequiredParamsUserCreateHandler(t *testing.T) {
 	if response.Params[0].Error != "Field name is required." {
 		t.Errorf("expected: Field name is required., got: %v\n", response.Params[0].Error)
 	}
+
+	if response.Params[1].Error != "Field email is required." {
+		t.Errorf("expected: Field email is required., got: %v\n", response.Params[1].Error)
+	}
 }
 
 func createUser() (user *models.User) {
