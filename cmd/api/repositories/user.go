@@ -2,7 +2,7 @@ package repositories
 
 import (
 	"database/sql"
-	"github.com/cgauge/bot/models"
+	"github.com/cgauge/bot/cmd/api/models"
 	"time"
 )
 
@@ -21,7 +21,7 @@ func (r *UserRepository) GetAll() (users []*models.User, err error) {
 		return nil, err
 	}
 
-	for  results.Next() {
+	for results.Next() {
 		var user models.User
 		err = results.Scan(&user.ID, &user.Name, &user.Email, &user.SlackId, &user.CreatedAt)
 
@@ -43,7 +43,13 @@ func (r *UserRepository) Find(id int) (user models.User, err error) {
 	return user, nil
 }
 
-func (r *UserRepository) Create(user *models.User) (*models.User, error) {
+func (r *UserRepository) Create(name, email, slackId string) (*models.User, error) {
+	user := &models.User{
+		Name:    name,
+		Email:   email,
+		SlackId: slackId,
+	}
+
 	insert, err := r.db.Prepare("insert into users (name, email, slack_id) values (?, ?, ?)")
 
 	if err != nil {

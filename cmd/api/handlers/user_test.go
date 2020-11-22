@@ -1,14 +1,17 @@
 package handlers_test
 
 import (
+	"bytes"
 	"database/sql"
 	"encoding/json"
 	"github.com/cgauge/bot/cmd/api/database"
 	"github.com/cgauge/bot/cmd/api/handlers"
+	"github.com/cgauge/bot/cmd/api/models"
 	"github.com/cgauge/bot/cmd/api/repositories"
+	"github.com/cgauge/bot/cmd/api/requests"
 	"github.com/cgauge/bot/cmd/api/responses"
 	router "github.com/cgauge/bot/cmd/api/routers"
-	"github.com/cgauge/bot/models"
+	"io/ioutil"
 	"net/http"
 	"net/http/httptest"
 	"os"
@@ -16,7 +19,7 @@ import (
 )
 
 var (
-	db *sql.DB
+	db         *sql.DB
 	repository repositories.UserRepository
 )
 
@@ -73,16 +76,42 @@ func TestUserListHandler(t *testing.T) {
 	}
 }
 
-
-func createUser() (user *models.User) {
-	user = &models.User{
-		Name:      "Naruto",
-		Email:     "naruto@gmail.com",
-		SlackId:   "123",
+func TestRequiredParamsUserCreateHandler(t *testing.T) {
+	request := &requests.CreateUserRequest{
+		"", "", "",
 	}
 
-	repository.Create(user)
+	bodyBuffer := new(bytes.Buffer)
+	json.NewEncoder(bodyBuffer).Encode(request)
+
+	w := httptest.NewRecorder()
+	h := &handlers.Handler{DB: db}
+
+	r, err := http.NewRequest("POST", "/users", bodyBuffer)
+
+	router.Router(h).ServeHTTP(w, r)
+
+	if err != nil {
+		panic(err)
+	}
+
+	body, errBody := ioutil.ReadAll(w.Body)
+
+	if errBody != nil {
+		t.Error(errBody)
+	}
+
+	response := &responses.InvalidParamResponse{}
+
+	json.Unmarshal(body, response)
+
+	if response.Params[0].Error != "Field name is required." {
+		t.Errorf("expected: Field name is required., got: %v\n", response.Params[0].Error)
+	}
+}
+
+func createUser() (user *models.User) {
+	repository.Create("Naruto", "naruto@gmail.com", "123")
 
 	return user
 }
-

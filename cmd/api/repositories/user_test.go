@@ -4,16 +4,15 @@ import (
 	"database/sql"
 	"fmt"
 	"github.com/cgauge/bot/cmd/api/database"
-	"github.com/cgauge/bot/models"
+	"github.com/cgauge/bot/cmd/api/models"
 	"os"
 	"testing"
 )
 
 var (
-	db *sql.DB
+	db         *sql.DB
 	repository UserRepository
 )
-
 
 func setup() {
 	db = database.ConnectDatabaseTest()
@@ -54,13 +53,7 @@ func TestGetAllUsersShouldRetrieveMax2(t *testing.T) {
 }
 
 func TestCreateUser(t *testing.T) {
-	user := &models.User{
-		Name:  "User Fake",
-		Email: "use@fake.com",
-		SlackId: "e778c568-1b00-11eb-adc1-0242ac120002",
-	}
-
-	user, err := repository.Create(user)
+	user, err := repository.Create("User Fake", "use@fake.com", "e778c568-1b00-11eb-adc1-0242ac120002")
 
 	if err != nil {
 		t.Error(err)
@@ -92,15 +85,8 @@ func TestFindUser(t *testing.T) {
 	}
 }
 
-
-func createUser(name string, email string, slackId string)  *models.User {
-	user := &models.User{
-		Name:  name,
-		Email: email,
-		SlackId: slackId,
-	}
-
-	user, err := repository.Create(user)
+func createUser(name, email, slackId string) *models.User {
+	user, err := repository.Create(name, email, slackId)
 
 	if err != nil {
 		panic(err)

@@ -2,7 +2,7 @@ package repositories
 
 import (
 	"database/sql"
-	"github.com/cgauge/bot/models"
+	"github.com/cgauge/bot/cmd/api/models"
 )
 
 type TenantRepository struct {
@@ -23,8 +23,7 @@ func (r *TenantRepository) GetAllTenants() (tenants []*models.Tenant, err error)
 		return nil, err
 	}
 
-
-	for  results.Next() {
+	for results.Next() {
 		var tenant models.Tenant
 		err = results.Scan(&tenant.ID, &tenant.Name)
 

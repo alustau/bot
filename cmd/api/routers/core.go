@@ -15,5 +15,7 @@ func Router(h *handlers.Handler) *mux.Router {
 
 	router.HandleFunc("/users", h.UsersListHandler).Methods("Get")
 
+	router.HandleFunc("/users", h.UserCreateHandler).Methods("Post")
+
 	return router
 }

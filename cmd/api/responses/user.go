@@ -1,6 +1,6 @@
 package responses
 
-import "github.com/cgauge/bot/models"
+import "github.com/cgauge/bot/cmd/api/models"
 
 //NotFoundMessage is return message default
 type UserResponse struct {
